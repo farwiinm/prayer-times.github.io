@@ -12,9 +12,9 @@
 <link rel="manifest" id="manifest-link" href="#">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-/* ===== THEME VARIABLES ===== */
+/* ===== THEMES ===== */
 [data-theme="dark"] {
-  --bg-page:#0a1628; --bg-card:#0f2035; --bg-panel:#162840; --bg-input:#0d1e33;
+  --bg-page:#0a1628; --bg-card:#0f2035; --bg-panel:#162840;
   --gold:#c8a96e; --gold-light:#e8cc9a; --gold-dim:#7a6040;
   --teal:#4ecdc4; --teal-dim:#2a7a75; --teal-bg:rgba(78,205,196,0.08);
   --text-1:#f0e6d3; --text-2:#a89070; --text-3:#4a5a6a;
@@ -22,10 +22,11 @@
   --friday-bg:rgba(78,205,196,0.06); --friday-border:rgba(78,205,196,0.3);
   --notif-bg:#0f2035; --notif-border:rgba(200,169,110,0.25);
   --toggle-bg:#162840; --toggle-knob:#c8a96e;
-  --stars:1;
+  --done-color:#4ecdc4; --pending-color:#4a5a6a;
+  --done-bg:rgba(78,205,196,0.1); --pending-bg:transparent;
 }
 [data-theme="light"] {
-  --bg-page:#f5f0e8; --bg-card:#ffffff; --bg-panel:#f0ebe0; --bg-input:#f8f4ee;
+  --bg-page:#f5f0e8; --bg-card:#ffffff; --bg-panel:#f0ebe0;
   --gold:#8a5f20; --gold-light:#6b4a18; --gold-dim:#b8912e;
   --teal:#1a8a84; --teal-dim:#1a8a84; --teal-bg:rgba(26,138,132,0.08);
   --text-1:#2c1f0e; --text-2:#6b5030; --text-3:#9a8060;
@@ -33,22 +34,24 @@
   --friday-bg:rgba(26,138,132,0.06); --friday-border:rgba(26,138,132,0.3);
   --notif-bg:#fff8f0; --notif-border:rgba(139,95,32,0.25);
   --toggle-bg:#e8dcc8; --toggle-knob:#8a5f20;
-  --stars:0;
+  --done-color:#1a8a84; --pending-color:#9a8060;
+  --done-bg:rgba(26,138,132,0.08); --pending-bg:transparent;
 }
-[data-theme="light"] body::before { opacity: 0; }
+[data-theme="light"] body::before { opacity:0; }
 
 /* ===== BASE ===== */
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg-page);color:var(--text-1);font-family:'Lato',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;transition:opacity .3s;
-  background-image:radial-gradient(1px 1px at 8% 12%,rgba(255,255,255,.35) 0%,transparent 100%),
-  radial-gradient(1px 1px at 22% 38%,rgba(255,255,255,.22) 0%,transparent 100%),
-  radial-gradient(1px 1px at 43% 8%,rgba(255,255,255,.38) 0%,transparent 100%),
-  radial-gradient(1px 1px at 58% 58%,rgba(255,255,255,.2) 0%,transparent 100%),
-  radial-gradient(1px 1px at 73% 22%,rgba(255,255,255,.3) 0%,transparent 100%),
-  radial-gradient(1px 1px at 88% 42%,rgba(255,255,255,.25) 0%,transparent 100%),
-  radial-gradient(1.5px 1.5px at 33% 78%,rgba(255,255,255,.15) 0%,transparent 100%),
-  radial-gradient(1px 1px at 63% 88%,rgba(255,255,255,.2) 0%,transparent 100%);}
+  background-image:
+    radial-gradient(1px 1px at 8% 12%,rgba(255,255,255,.35) 0%,transparent 100%),
+    radial-gradient(1px 1px at 22% 38%,rgba(255,255,255,.22) 0%,transparent 100%),
+    radial-gradient(1px 1px at 43% 8%,rgba(255,255,255,.38) 0%,transparent 100%),
+    radial-gradient(1px 1px at 58% 58%,rgba(255,255,255,.2) 0%,transparent 100%),
+    radial-gradient(1px 1px at 73% 22%,rgba(255,255,255,.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 88% 42%,rgba(255,255,255,.25) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 33% 78%,rgba(255,255,255,.15) 0%,transparent 100%),
+    radial-gradient(1px 1px at 63% 88%,rgba(255,255,255,.2) 0%,transparent 100%);}
 .container{position:relative;z-index:1;max-width:480px;margin:0 auto;padding-bottom:76px;}
 
 /* ===== HEADER ===== */
@@ -58,26 +61,18 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;tra
 .header-top{width:100%;display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
 .header-arabic{font-size:15px;color:var(--gold-dim);flex:1;text-align:center;}
 .header-actions{display:flex;gap:8px;align-items:center;}
-
-/* Theme toggle */
 .theme-toggle{background:var(--toggle-bg);border:1px solid var(--border);border-radius:20px;
   width:42px;height:22px;cursor:pointer;position:relative;transition:background .3s;flex-shrink:0;}
 .theme-toggle-knob{position:absolute;top:2px;width:16px;height:16px;border-radius:50%;
   background:var(--toggle-knob);transition:left .25s;left:2px;}
 [data-theme="light"] .theme-toggle-knob{left:22px;}
 .theme-toggle-icon{position:absolute;top:50%;transform:translateY(-50%);font-size:10px;line-height:1;}
-[data-theme="dark"] .sun-icon{right:3px;opacity:.5;}
-[data-theme="dark"] .moon-icon{left:3px;opacity:1;}
-[data-theme="light"] .sun-icon{right:3px;opacity:1;}
-[data-theme="light"] .moon-icon{left:3px;opacity:.4;}
-
-/* Notif button */
-.notif-btn{background:none;border:1px solid var(--border);border-radius:8px;
-  padding:3px 8px;cursor:pointer;font-size:11px;color:var(--text-3);
-  transition:all .2s;white-space:nowrap;font-family:'Lato',sans-serif;}
+[data-theme="dark"] .sun-icon{right:3px;opacity:.5;} [data-theme="dark"] .moon-icon{left:3px;opacity:1;}
+[data-theme="light"] .sun-icon{right:3px;opacity:1;} [data-theme="light"] .moon-icon{left:3px;opacity:.4;}
+.notif-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:3px 8px;
+  cursor:pointer;font-size:11px;color:var(--text-3);transition:all .2s;white-space:nowrap;font-family:'Lato',sans-serif;}
 .notif-btn.granted{color:var(--teal);border-color:var(--teal-dim);}
 .notif-btn.denied{color:#e07b5a;border-color:rgba(224,123,90,.3);}
-
 .header-title{font-family:'Cinzel',serif;font-size:20px;font-weight:600;color:var(--gold);letter-spacing:1px;}
 .header-sub{font-size:11px;color:var(--text-3);margin-top:2px;letter-spacing:2px;text-transform:uppercase;}
 
@@ -109,16 +104,33 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;tra
 
 /* ===== PRAYER LIST ===== */
 .prayer-list{margin:0.9rem 1.25rem 0;display:flex;flex-direction:column;gap:6px;}
-.prayer-item{display:flex;align-items:center;padding:12px 15px;background:var(--bg-card);
-  border:1px solid var(--border);border-radius:10px;position:relative;overflow:hidden;transition:background .3s,border .3s,opacity .2s;}
+
+/* Summary bar */
+.status-summary{display:flex;align-items:center;gap:10px;padding:8px 15px;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:10px;
+  font-size:12px;color:var(--text-3);transition:background .3s;}
+.status-done{color:var(--done-color);font-weight:700;}
+.status-pending{color:var(--pending-color);}
+.status-divider{color:var(--border-strong);}
+
+.prayer-item{display:flex;align-items:center;padding:11px 15px;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:10px;position:relative;overflow:hidden;
+  transition:background .3s,border .3s,opacity .2s;}
 .prayer-item.is-next{border-color:var(--teal-dim);background:var(--teal-bg);box-shadow:0 0 16px rgba(78,205,196,0.07);}
-.prayer-item.is-past{opacity:.35;}
+.prayer-item.is-done{opacity:.5;}
 .active-bar{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--teal);border-radius:10px 0 0 10px;}
-.p-dot{width:9px;height:9px;border-radius:50%;margin-right:13px;flex-shrink:0;}
+.p-dot{width:8px;height:8px;border-radius:50%;margin-right:12px;flex-shrink:0;}
 .p-name{font-family:'Cinzel',serif;font-size:13px;font-weight:600;color:var(--text-1);flex:1;}
 .p-arabic{font-size:11px;color:var(--text-3);margin-left:4px;}
-.p-time{font-size:17px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;}
+.p-time{font-size:16px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;margin-right:10px;}
 .prayer-item.is-next .p-time{color:var(--teal);}
+
+/* Status badge */
+.p-status{font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 7px;border-radius:20px;
+  flex-shrink:0;text-transform:uppercase;transition:all .2s;}
+.p-status.done{background:var(--done-bg);color:var(--done-color);}
+.p-status.next{background:rgba(78,205,196,0.15);color:var(--teal);}
+.p-status.pending{background:var(--pending-bg);color:var(--pending-color);border:1px solid var(--border);}
 
 /* ===== NOTIFICATION BANNER ===== */
 .notif-banner{margin:0.8rem 1.25rem 0;background:var(--notif-bg);border:1px solid var(--notif-border);
@@ -126,15 +138,21 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;tra
 .notif-banner:hover{border-color:var(--border-strong);}
 .notif-banner-icon{font-size:18px;flex-shrink:0;}
 .notif-banner-text{flex:1;}
-.notif-banner-title{font-size:13px;font-weight:400;color:var(--text-1);margin-bottom:1px;}
+.notif-banner-title{font-size:13px;color:var(--text-1);margin-bottom:1px;}
 .notif-banner-sub{font-size:11px;color:var(--text-3);}
 .notif-banner-cta{font-size:11px;color:var(--teal);font-weight:700;white-space:nowrap;letter-spacing:.5px;}
+
+/* ===== OFFLINE BADGE ===== */
+.offline-badge{position:fixed;top:0;left:50%;transform:translateX(-50%);
+  background:#e07b5a;color:#fff;font-size:11px;padding:4px 14px;border-radius:0 0 8px 8px;
+  z-index:999;letter-spacing:1px;display:none;}
+.offline-badge.show{display:block;}
 
 /* ===== BOTTOM NAV ===== */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;
   background:var(--bg-page);border-top:1px solid var(--border);
-  display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:200;
-  backdrop-filter:blur(14px);transition:background .3s,border .3s;}
+  display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom));
+  z-index:200;backdrop-filter:blur(14px);transition:background .3s,border .3s;}
 .nav-btn{background:none;border:none;color:var(--text-3);cursor:pointer;display:flex;
   flex-direction:column;align-items:center;gap:3px;padding:6px 28px;border-radius:8px;
   transition:color .2s;font-family:'Lato',sans-serif;}
@@ -172,13 +190,17 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;tra
 @media(max-width:380px){
   .next-time{font-size:30px;} .clock-time{font-size:36px;}
   .mt{font-size:10px;} .mt td,.mt th{padding:6px 3px;}
+  .p-status{display:none;}
 }
 </style>
 </head>
 <body>
+
+<div class="offline-badge" id="offline-badge">● Offline — using cached data</div>
+
 <div class="container">
 
-  <!-- TODAY PAGE -->
+  <!-- ── TODAY PAGE ── -->
   <div id="page-today" class="page active">
     <div class="header">
       <div class="header-top">
@@ -216,7 +238,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;tra
     <div style="height:.5rem"></div>
   </div>
 
-  <!-- TIMETABLE PAGE -->
+  <!-- ── TIMETABLE PAGE ── -->
   <div id="page-timetable" class="page">
     <div class="header">
       <div class="header-top">
@@ -261,9 +283,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;tra
 
 <script>
 // ============================================================
-// OFFICIAL ACJU ZONE 01 — Colombo/Gampaha/Kalutara 2026
-// Transcribed from official ACJU PDF timetables
-// Row: [day, fajr, sunrise, dhuhr, asr, maghrib, isha]
+// ACJU ZONE 01 — Colombo / Gampaha / Kalutara 2026
+// [day, fajr, sunrise, dhuhr, asr, maghrib, isha]
 // ============================================================
 const RAW = {
   4:[
@@ -426,30 +447,29 @@ const RAW = {
   ]
 };
 
-// Friday hadiths (rotating)
 const FRIDAY_HADITHS = [
-  { text: "The best day on which the sun rises is Friday. On it Adam was created, on it he was admitted to Paradise, and on it he was expelled from it.", source: "Sahih Muslim 854" },
-  { text: "There is a time on Friday at which no Muslim stands and prays and asks Allah for something good, but He will give it to him.", source: "Sahih al-Bukhari 935" },
-  { text: "Whoever recites Surah Al-Kahf on Friday, a light will shine for him between the two Fridays.", source: "Al-Hakim, Sahih" },
-  { text: "Send abundant blessings upon me on Friday, for your blessings are presented to me.", source: "Abu Dawud 1047, Hasan" },
-  { text: "Friday is the master of days, and the greatest of them before Allah. It is greater before Allah than the day of Adha and the day of Fitr.", source: "Ibn Majah 1084, Sahih" },
+  { text:"The best day on which the sun rises is Friday. On it Adam was created, on it he was admitted to Paradise, and on it he was expelled from it.", source:"Sahih Muslim 854" },
+  { text:"There is a time on Friday at which no Muslim stands and prays and asks Allah for something good, but He will give it to him.", source:"Sahih al-Bukhari 935" },
+  { text:"Whoever recites Surah Al-Kahf on Friday, a light will shine for him between the two Fridays.", source:"Al-Hakim, Sahih" },
+  { text:"Send abundant blessings upon me on Friday, for your blessings are presented to me.", source:"Abu Dawud 1047, Hasan" },
+  { text:"Friday is the master of days, and the greatest of them before Allah. It is greater before Allah than the day of Adha and the day of Fitr.", source:"Ibn Majah 1084, Sahih" },
 ];
 
-// ---- TIME UTILS ----
+// ── TIME UTILS ──
 function toMins(str, idx) {
   const [h, m] = str.split(':').map(Number);
-  if (idx < 2) return h * 60 + m;
-  if (idx === 2) return 720 + m;
-  return (h === 12 ? 12 : h + 12) * 60 + m;
+  if (idx < 2) return h * 60 + m;       // Fajr, Sunrise → AM
+  if (idx === 2) return 720 + m;         // Dhuhr → 12:xx PM
+  return (h === 12 ? 12 : h + 12) * 60 + m; // Asr, Maghrib, Isha → PM
 }
 function fmt(mins) {
-  const h = Math.floor(mins / 60) % 24, m = mins % 60;
-  return (h % 12 || 12) + ':' + String(m).padStart(2,'0') + ' ' + (h >= 12 ? 'PM' : 'AM');
+  const h = Math.floor(mins/60)%24, m = mins%60;
+  return (h%12||12)+':'+String(m).padStart(2,'0')+' '+(h>=12?'PM':'AM');
 }
 function getTimes(month, day) {
   const mData = RAW[month]; if (!mData) return null;
   const row = mData.find(r => r[0] === day); if (!row) return null;
-  return row.slice(1).map((t, i) => toMins(t, i));
+  return row.slice(1).map((t,i) => toMins(t,i));
 }
 
 const PNAMES = ["Fajr","Sunrise","Dhuhr","Asr","Maghrib","Isha"];
@@ -460,228 +480,266 @@ const MSHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov
 const WDAYS  = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const HM     = ["Muharram","Safar","Rabi ul-Awwal","Rabi ul-Akhir","Jumadal-Ula","Jumadal-Akhira","Rajab","Sha'ban","Ramadan","Shawwal","Dhul Qa'dah","Dhul Hijjah"];
 
-// ---- HIJRI ----
+// ── HIJRI ──
 function toHijri(gy, gm, gd) {
-  let y = gy, m = gm, d = gd;
-  if (m < 3) { y--; m += 12; }
-  const A = Math.floor(y/100), B = 2 - A + Math.floor(A/4);
-  const JD = Math.floor(365.25*(y+4716)) + Math.floor(30.6001*(m+1)) + d + B - 1524.5;
-  const hYear = Math.floor((30*(JD-1948439.5)+10646)/10631);
-  const hYearStart = 1948439.5 + 29.5001*Math.floor((11*hYear+3)/30);
-  const hMonth = Math.min(12, Math.ceil((JD-hYearStart)/29.5)+1);
-  const hMonthStart = hYearStart + 29.5001*Math.floor(hMonth-1);
-  const hDay = Math.max(1, Math.min(Math.floor(JD-hMonthStart)+1, 30));
-  return { y: hYear, m: hMonth, d: hDay };
+  let y=gy, m=gm, d=gd;
+  if (m<3){y--;m+=12;}
+  const A=Math.floor(y/100), B=2-A+Math.floor(A/4);
+  const JD=Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5;
+  const hY=Math.floor((30*(JD-1948439.5)+10646)/10631);
+  const hYS=1948439.5+29.5001*Math.floor((11*hY+3)/30);
+  const hM=Math.min(12,Math.ceil((JD-hYS)/29.5)+1);
+  const hD=Math.max(1,Math.min(Math.floor(JD-(hYS+29.5001*Math.floor(hM-1)))+1,30));
+  return {y:hY,m:hM,d:hD};
 }
 
-// ---- THEME ----
+// ── THEME ──
 function toggleTheme() {
-  const html = document.documentElement;
-  const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
-  html.dataset.theme = next;
-  document.getElementById('theme-meta').content = next === 'dark' ? '#0a1628' : '#f5f0e8';
-  localStorage.setItem('theme', next);
+  const html=document.documentElement;
+  const next=html.dataset.theme==='dark'?'light':'dark';
+  html.dataset.theme=next;
+  document.getElementById('theme-meta').content=next==='dark'?'#0a1628':'#f5f0e8';
+  localStorage.setItem('theme',next);
 }
-(function() {
-  const saved = localStorage.getItem('theme');
-  if (saved) document.documentElement.dataset.theme = saved;
-})();
+(()=>{const s=localStorage.getItem('theme');if(s)document.documentElement.dataset.theme=s;})();
 
-// ---- NAVIGATION ----
+// ── OFFLINE DETECTION ──
+window.addEventListener('online',  ()=>document.getElementById('offline-badge').classList.remove('show'));
+window.addEventListener('offline', ()=>document.getElementById('offline-badge').classList.add('show'));
+if (!navigator.onLine) document.getElementById('offline-badge').classList.add('show');
+
+// ── NAVIGATION ──
 function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   document.getElementById('nav-'+name).classList.add('active');
-  if (name === 'timetable' && !document.getElementById('month-list').childElementCount) renderTimetable();
+  if (name==='timetable' && !document.getElementById('month-list').childElementCount) renderTimetable();
 }
 
-// ---- NOTIFICATIONS ----
+// ── NOTIFICATIONS ──
+// Per prayer (skipping Sunrise):
+//   • 10-minute warning before prayer time
+//   • Notification exactly at prayer time
+// No Sahr reminder.
+
 let notifGranted = false;
 let scheduledToday = '';
 
 function updateNotifBtn() {
-  const btn = document.getElementById('notif-btn');
-  const perm = Notification.permission;
-  if (perm === 'granted') {
-    btn.textContent = '🔔 On'; btn.className = 'notif-btn granted';
-    notifGranted = true;
-  } else if (perm === 'denied') {
-    btn.textContent = '🔕 Off'; btn.className = 'notif-btn denied';
-  } else {
-    btn.textContent = '🔔'; btn.className = 'notif-btn';
-  }
+  const btn=document.getElementById('notif-btn');
+  const p=Notification.permission;
+  if (p==='granted'){btn.textContent='🔔 On';btn.className='notif-btn granted';notifGranted=true;}
+  else if(p==='denied'){btn.textContent='🔕 Off';btn.className='notif-btn denied';}
+  else{btn.textContent='🔔';btn.className='notif-btn';}
 }
 
 function showNotifBanner() {
-  if (!('Notification' in window) || Notification.permission !== 'default') return;
-  const wrap = document.getElementById('notif-banner-wrap');
-  wrap.innerHTML = `
+  if (!('Notification' in window)||Notification.permission!=='default') return;
+  document.getElementById('notif-banner-wrap').innerHTML=`
     <div class="notif-banner" onclick="requestNotifications()">
       <div class="notif-banner-icon">🔔</div>
       <div class="notif-banner-text">
         <div class="notif-banner-title">Enable prayer time reminders</div>
-        <div class="notif-banner-sub">Get notified at each prayer time</div>
+        <div class="notif-banner-sub">10-min warning + alert at each prayer time</div>
       </div>
       <div class="notif-banner-cta">ENABLE →</div>
     </div>`;
 }
 
 async function requestNotifications() {
-  if (!('Notification' in window)) { alert('Notifications are not supported in this browser.'); return; }
-  const perm = await Notification.requestPermission();
+  if (!('Notification' in window)){alert('Notifications not supported in this browser.');return;}
+  const p=await Notification.requestPermission();
   updateNotifBtn();
-  document.getElementById('notif-banner-wrap').innerHTML = '';
-  if (perm === 'granted') {
-    notifGranted = true;
-    scheduleToday();
-    new Notification('Prayer Times Active 🕌', {
-      body: 'You will be notified at each prayer time. JazakAllah Khair.',
-      icon: ''
-    });
+  document.getElementById('notif-banner-wrap').innerHTML='';
+  if (p==='granted'){
+    notifGranted=true; scheduleToday();
+    new Notification('Prayer Times Active 🕌',{body:'10-min warning + alert at each prayer time. JazakAllah Khair.',icon:''});
   }
 }
 
 function scheduleToday() {
   if (!notifGranted) return;
-  const now = new Date();
-  const dateKey = now.toDateString();
-  if (scheduledToday === dateKey) return;
-  scheduledToday = dateKey;
-  const mo = now.getMonth()+1, d = now.getDate();
-  const times = getTimes(mo, d);
+  const now=new Date();
+  const key=now.toDateString();
+  if (scheduledToday===key) return;
+  scheduledToday=key;
+
+  const mo=now.getMonth()+1, d=now.getDate();
+  const times=getTimes(mo,d);
   if (!times) return;
-  const nowMs = Date.now();
+  const nowMs=Date.now();
 
-  // Sahr reminder: 2 min before Fajr
-  const sahrMs = new Date(now.getFullYear(), now.getMonth(), now.getDate(),
-    Math.floor(times[0]/60), times[0]%60, 0, 0).getTime() - 2*60*1000;
-  if (sahrMs > nowMs) {
-    setTimeout(() => {
-      new Notification('⏰ Sahr Reminder', { body: 'Fajr in 2 minutes. End your Sahr now.', icon: '' });
-    }, sahrMs - nowMs);
-  }
+  PNAMES.forEach((name,i)=>{
+    if (i===1) return; // skip Sunrise
 
-  PNAMES.forEach((name, i) => {
-    const pMs = new Date(now.getFullYear(), now.getMonth(), now.getDate(),
-      Math.floor(times[i]/60), times[i]%60, 0, 0).getTime();
-    if (pMs > nowMs) {
-      setTimeout(() => {
-        if (i === 1) return; // skip sunrise notification
-        new Notification('🕌 ' + name + ' Time', {
-          body: fmt(times[i]) + ' — ' + PAR[i],
-          icon: ''
-        });
-      }, pMs - nowMs);
+    const pMs=new Date(now.getFullYear(),now.getMonth(),now.getDate(),
+      Math.floor(times[i]/60),times[i]%60,0,0).getTime();
+
+    // 10-minute warning
+    const warnMs=pMs - 10*60*1000;
+    if (warnMs>nowMs){
+      setTimeout(()=>{
+        new Notification('⏰ '+name+' in 10 minutes',{
+          body:name+' ('+PAR[i]+') at '+fmt(times[i]),icon:''});
+      }, warnMs-nowMs);
+    }
+
+    // At prayer time
+    if (pMs>nowMs){
+      setTimeout(()=>{
+        new Notification('🕌 '+name+' Time — '+fmt(times[i]),{
+          body:'It is time for '+name+' ('+PAR[i]+'). Allahu Akbar.',icon:''});
+      }, pMs-nowMs);
     }
   });
 }
 
-// ---- JUMU'AH CARD ----
+// ── JUMU'AH CARD ──
 function renderJumuah(now) {
-  const wrap = document.getElementById('jumuah-wrap');
-  if (now.getDay() !== 5) { wrap.innerHTML = ''; return; }
-  const hadith = FRIDAY_HADITHS[Math.floor(now.getDate() / 7) % FRIDAY_HADITHS.length];
-  wrap.innerHTML = `
+  const wrap=document.getElementById('jumuah-wrap');
+  if (now.getDay()!==5){wrap.innerHTML='';return;}
+  const h=FRIDAY_HADITHS[Math.floor(now.getDate()/7)%FRIDAY_HADITHS.length];
+  wrap.innerHTML=`
     <div class="jumuah-card">
       <div class="jumuah-header">
         <div class="jumuah-title">🕌 Jumu'ah — Friday</div>
         <div class="jumuah-time">12:30 PM</div>
       </div>
-      <div class="jumuah-hadith">"${hadith.text}"</div>
-      <div class="jumuah-source">— ${hadith.source}</div>
+      <div class="jumuah-hadith">"${h.text}"</div>
+      <div class="jumuah-source">— ${h.source}</div>
     </div>`;
 }
 
-// ---- TODAY RENDER ----
-let lastSecond = -1;
+// ── TODAY RENDER ──
+let lastMinute = -1;
+
 function renderToday() {
-  const now = new Date();
-  const mo = now.getMonth()+1, d = now.getDate();
-  const nowM = now.getHours()*60 + now.getMinutes();
-  const sec = now.getSeconds();
-  const times = getTimes(mo, d);
+  const now=new Date();
+  const mo=now.getMonth()+1, d=now.getDate();
+  const nowM=now.getHours()*60+now.getMinutes();
+  const sec=now.getSeconds();
+  const times=getTimes(mo,d);
 
   // Clock — every second
-  document.getElementById('clock').textContent =
-    String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+  document.getElementById('clock').textContent=
+    String(now.getHours()).padStart(2,'0')+':'+
+    String(now.getMinutes()).padStart(2,'0')+':'+
+    String(sec).padStart(2,'0');
 
-  // Rest — only update when minute changes
-  if (sec === lastSecond) return;
-  lastSecond = sec;
+  // Heavier work only on minute change
+  if (nowM===lastMinute) return;
+  lastMinute=nowM;
 
-  const hi = toHijri(now.getFullYear(), mo, d);
-  document.getElementById('clock-date').textContent =
-    WDAYS[now.getDay()]+', '+d+' '+MFULL[mo-1]+' · '+hi.d+' '+HM[hi.m-1]+' '+hi.y+' AH';
+  // Date line with Hijri
+  const hi=toHijri(now.getFullYear(),mo,d);
+  document.getElementById('clock-date').textContent=
+    WDAYS[now.getDay()]+', '+d+' '+MFULL[mo-1]+
+    ' · '+hi.d+' '+HM[hi.m-1]+' '+hi.y+' AH';
 
   renderJumuah(now);
 
-  // Next prayer
-  let nextIdx = -1;
+  // Next prayer index
+  let nextIdx=-1;
   if (times) for (let i=0;i<times.length;i++) if(times[i]>nowM){nextIdx=i;break;}
 
-  if (times && nextIdx >= 0) {
-    const diff = times[nextIdx] - nowM;
-    const hh = Math.floor(diff/60), mm = diff%60;
-    document.getElementById('next-name').textContent = PNAMES[nextIdx];
-    document.getElementById('next-time').textContent = fmt(times[nextIdx]);
-    document.getElementById('next-remaining').innerHTML =
+  // Countdown card
+  if (times && nextIdx>=0){
+    const diff=times[nextIdx]-nowM;
+    const hh=Math.floor(diff/60), mm=diff%60;
+    document.getElementById('next-name').textContent=PNAMES[nextIdx];
+    document.getElementById('next-time').textContent=fmt(times[nextIdx]);
+    document.getElementById('next-remaining').innerHTML=
       'in <span>'+(hh>0?hh+'h ':'')+mm+' min'+(mm!==1?'s':'')+'</span>';
   } else {
-    document.getElementById('next-name').textContent = 'Fajr';
-    document.getElementById('next-time').textContent = 'Tomorrow';
-    document.getElementById('next-remaining').textContent = 'All prayers completed for today';
+    document.getElementById('next-name').textContent='Fajr';
+    document.getElementById('next-time').textContent='Tomorrow';
+    document.getElementById('next-remaining').textContent='All prayers completed for today';
   }
 
-  // Prayer list
-  const list = document.getElementById('prayer-list');
-  list.innerHTML = '';
-  if (!times) {
-    list.innerHTML = '<div style="text-align:center;color:var(--text-3);padding:2rem;font-size:13px">No data for today</div>';
+  // ── Prayer list with status ──
+  const list=document.getElementById('prayer-list');
+  list.innerHTML='';
+
+  if (!times){
+    list.innerHTML='<div style="text-align:center;color:var(--text-3);padding:2rem;font-size:13px">No data for today</div>';
     return;
   }
-  PNAMES.forEach((name, i) => {
-    const isPast = times[i] < nowM, isNext = i===nextIdx;
-    const el = document.createElement('div');
-    el.className = 'prayer-item'+(isNext?' is-next':'')+(isPast&&!isNext?' is-past':'');
-    el.innerHTML = `${isNext?'<div class="active-bar"></div>':''}
+
+  // Count completed & pending (exclude Sunrise from salah count)
+  const salahIndices=[0,2,3,4,5]; // Fajr, Dhuhr, Asr, Maghrib, Isha
+  const doneSalah = salahIndices.filter(i=>times[i]<nowM).length;
+  const pendingSalah = salahIndices.filter(i=>times[i]>=nowM).length;
+
+  // Summary bar
+  const summary=document.createElement('div');
+  summary.className='status-summary';
+  summary.innerHTML=
+    '<span class="status-done">✓ '+doneSalah+' completed</span>'+
+    '<span class="status-divider">·</span>'+
+    '<span class="status-pending">◯ '+pendingSalah+' remaining</span>';
+  list.appendChild(summary);
+
+  // Prayer rows
+  PNAMES.forEach((name,i)=>{
+    const isDone = times[i]<nowM;
+    const isNext = i===nextIdx;
+    const el=document.createElement('div');
+    el.className='prayer-item'+(isNext?' is-next':'')+(isDone&&!isNext?' is-done':'');
+
+    // Status badge label & class
+    let badgeClass, badgeLabel;
+    if (i===1) { // Sunrise — not a salah, no badge
+      badgeClass=''; badgeLabel='';
+    } else if (isDone) {
+      badgeClass='done'; badgeLabel='✓ Done';
+    } else if (isNext) {
+      badgeClass='next'; badgeLabel='Next';
+    } else {
+      badgeClass='pending'; badgeLabel='Pending';
+    }
+
+    const badge = (i===1) ? '' :
+      `<div class="p-status ${badgeClass}">${badgeLabel}</div>`;
+
+    el.innerHTML=`
+      ${isNext?'<div class="active-bar"></div>':''}
       <div class="p-dot" style="background:${PCOL[i]}"></div>
-      <div style="flex:1"><span class="p-name">${name}</span><span class="p-arabic">${PAR[i]}</span></div>
-      <div class="p-time">${fmt(times[i])}</div>`;
+      <div style="flex:1">
+        <span class="p-name">${name}</span>
+        <span class="p-arabic">${PAR[i]}</span>
+      </div>
+      <div class="p-time">${fmt(times[i])}</div>
+      ${badge}`;
     list.appendChild(el);
   });
 
-  // Schedule notifications once per day
   scheduleToday();
 }
 
-// ---- TIMETABLE ----
+// ── TIMETABLE ──
 function renderTimetable() {
-  const container = document.getElementById('month-list');
-  const today = new Date();
-  // Day-of-week for Jan 1 2026 = Thursday (4), so Jan 1 offset
-  // We compute weekday for each date directly
-  Object.entries(RAW).forEach(([mStr, days]) => {
-    const mo = parseInt(mStr);
-    const isCurrentMonth = mo === today.getMonth()+1;
-    const card = document.createElement('div');
-    card.className = 'month-card'+(isCurrentMonth?' open':'');
-    const rows = days.map(row => {
-      const [d, ...ts] = row;
-      const isToday = today.getFullYear()===2026 && today.getMonth()+1===mo && today.getDate()===d;
-      const dow = new Date(2026, mo-1, d).getDay(); // 5 = Friday
-      const isFriday = dow === 5;
-      const tMins = ts.map((t,i)=>toMins(t,i));
-      const cls = isToday ? 'today-row' : (isFriday ? 'friday-row' : '');
-      const dayLabel = d+' '+MSHORT[mo-1]+(isFriday?' 🕌':'');
+  const container=document.getElementById('month-list');
+  const today=new Date();
+  Object.entries(RAW).forEach(([mStr,days])=>{
+    const mo=parseInt(mStr);
+    const isNow=mo===today.getMonth()+1;
+    const card=document.createElement('div');
+    card.className='month-card'+(isNow?' open':'');
+    const rows=days.map(row=>{
+      const [d,...ts]=row;
+      const isToday=today.getFullYear()===2026&&today.getMonth()+1===mo&&today.getDate()===d;
+      const isFriday=new Date(2026,mo-1,d).getDay()===5;
+      const tM=ts.map((t,i)=>toMins(t,i));
+      const cls=isToday?'today-row':(isFriday?'friday-row':'');
       return `<tr class="${cls}">
-        <td>${dayLabel}</td>
-        <td>${fmt(tMins[0])}</td><td>${fmt(tMins[1])}</td>
-        <td>${fmt(tMins[2])}</td><td>${fmt(tMins[3])}</td>
-        <td>${fmt(tMins[4])}</td><td>${fmt(tMins[5])}</td>
+        <td>${d} ${MSHORT[mo-1]}${isFriday?' 🕌':''}</td>
+        <td>${fmt(tM[0])}</td><td>${fmt(tM[1])}</td>
+        <td>${fmt(tM[2])}</td><td>${fmt(tM[3])}</td>
+        <td>${fmt(tM[4])}</td><td>${fmt(tM[5])}</td>
       </tr>`;
     }).join('');
-    card.innerHTML = `
+    card.innerHTML=`
       <div class="month-head" onclick="this.parentElement.classList.toggle('open')">
         <span class="month-head-name">${MFULL[mo-1]} 2026</span>
         <span class="month-head-toggle">▾</span>
@@ -699,34 +757,35 @@ function renderTimetable() {
   });
 }
 
-// ---- PWA MANIFEST ----
+// ── PWA MANIFEST ──
 try {
-  const m = {
-    name:"Prayer Times — Dehiwala",short_name:"Salah Times",
+  const m={name:"Prayer Times — Dehiwala",short_name:"Salah Times",
     description:"ACJU Official Prayer Times for Dehiwala, Zone 01, 2026",
-    start_url:".",display:"standalone",orientation:"portrait",
+    start_url:"./",display:"standalone",orientation:"portrait",
     background_color:"#0a1628",theme_color:"#0a1628",
-    icons:[{
-      src:"data:image/svg+xml,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%230a1628'/><text y='130' x='96' font-size='100' text-anchor='middle'>🕌</text></svg>"),
-      sizes:"192x192",type:"image/svg+xml"
-    }]
-  };
-  document.getElementById('manifest-link').href = URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/manifest+json'}));
+    icons:[{src:"data:image/svg+xml,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%230a1628'/><text y='130' x='96' font-size='100' text-anchor='middle'>🕌</text></svg>"),sizes:"192x192",type:"image/svg+xml"}]};
+  document.getElementById('manifest-link').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/manifest+json'}));
 } catch(e){}
 
-// ---- INIT ----
-if ('Notification' in window) {
-  updateNotifBtn();
-  showNotifBanner();
+// ── SERVICE WORKER REGISTRATION ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.log('SW registration failed:', err));
+  });
 }
+
+// ── INIT ──
+if ('Notification' in window){ updateNotifBtn(); showNotifBanner(); }
 renderToday();
 setInterval(renderToday, 1000);
 
 // Reschedule at midnight
 function scheduleNextMidnight() {
-  const now = new Date();
-  const msToMidnight = new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,5).getTime() - now.getTime();
-  setTimeout(() => { scheduledToday = ''; scheduleToday(); scheduleNextMidnight(); }, msToMidnight);
+  const now=new Date();
+  const ms=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,5).getTime()-now.getTime();
+  setTimeout(()=>{ scheduledToday=''; scheduleToday(); scheduleNextMidnight(); }, ms);
 }
 scheduleNextMidnight();
 </script>
