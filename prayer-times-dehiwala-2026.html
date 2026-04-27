@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a1628" id="theme-meta">
+<meta name="description" content="ACJU Prayer Times — Dehiwala 2026">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Salah Times">
+<title>Prayer Times — Dehiwala 2026</title>
+<link rel="manifest" id="manifest-link" href="#">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* ===== THEME VARIABLES ===== */
+[data-theme="dark"] {
+  --bg-page:#0a1628; --bg-card:#0f2035; --bg-panel:#162840; --bg-input:#0d1e33;
+  --gold:#c8a96e; --gold-light:#e8cc9a; --gold-dim:#7a6040;
+  --teal:#4ecdc4; --teal-dim:#2a7a75; --teal-bg:rgba(78,205,196,0.08);
+  --text-1:#f0e6d3; --text-2:#a89070; --text-3:#4a5a6a;
+  --border:rgba(200,169,110,0.18); --border-strong:rgba(200,169,110,0.38);
+  --friday-bg:rgba(78,205,196,0.06); --friday-border:rgba(78,205,196,0.3);
+  --notif-bg:#0f2035; --notif-border:rgba(200,169,110,0.25);
+  --toggle-bg:#162840; --toggle-knob:#c8a96e;
+  --stars:1;
+}
+[data-theme="light"] {
+  --bg-page:#f5f0e8; --bg-card:#ffffff; --bg-panel:#f0ebe0; --bg-input:#f8f4ee;
+  --gold:#8a5f20; --gold-light:#6b4a18; --gold-dim:#b8912e;
+  --teal:#1a8a84; --teal-dim:#1a8a84; --teal-bg:rgba(26,138,132,0.08);
+  --text-1:#2c1f0e; --text-2:#6b5030; --text-3:#9a8060;
+  --border:rgba(139,95,32,0.2); --border-strong:rgba(139,95,32,0.4);
+  --friday-bg:rgba(26,138,132,0.06); --friday-border:rgba(26,138,132,0.3);
+  --notif-bg:#fff8f0; --notif-border:rgba(139,95,32,0.25);
+  --toggle-bg:#e8dcc8; --toggle-knob:#8a5f20;
+  --stars:0;
+}
+[data-theme="light"] body::before { opacity: 0; }
+
+/* ===== BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg-page);color:var(--text-1);font-family:'Lato',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;transition:opacity .3s;
+  background-image:radial-gradient(1px 1px at 8% 12%,rgba(255,255,255,.35) 0%,transparent 100%),
+  radial-gradient(1px 1px at 22% 38%,rgba(255,255,255,.22) 0%,transparent 100%),
+  radial-gradient(1px 1px at 43% 8%,rgba(255,255,255,.38) 0%,transparent 100%),
+  radial-gradient(1px 1px at 58% 58%,rgba(255,255,255,.2) 0%,transparent 100%),
+  radial-gradient(1px 1px at 73% 22%,rgba(255,255,255,.3) 0%,transparent 100%),
+  radial-gradient(1px 1px at 88% 42%,rgba(255,255,255,.25) 0%,transparent 100%),
+  radial-gradient(1.5px 1.5px at 33% 78%,rgba(255,255,255,.15) 0%,transparent 100%),
+  radial-gradient(1px 1px at 63% 88%,rgba(255,255,255,.2) 0%,transparent 100%);}
+.container{position:relative;z-index:1;max-width:480px;margin:0 auto;padding-bottom:76px;}
+
+/* ===== HEADER ===== */
+.header{text-align:center;padding:1.4rem 1.5rem 1rem;border-bottom:1px solid var(--border);
+  background:var(--bg-page);position:sticky;top:0;z-index:100;backdrop-filter:blur(14px);
+  display:flex;flex-direction:column;align-items:center;}
+.header-top{width:100%;display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+.header-arabic{font-size:15px;color:var(--gold-dim);flex:1;text-align:center;}
+.header-actions{display:flex;gap:8px;align-items:center;}
+
+/* Theme toggle */
+.theme-toggle{background:var(--toggle-bg);border:1px solid var(--border);border-radius:20px;
+  width:42px;height:22px;cursor:pointer;position:relative;transition:background .3s;flex-shrink:0;}
+.theme-toggle-knob{position:absolute;top:2px;width:16px;height:16px;border-radius:50%;
+  background:var(--toggle-knob);transition:left .25s;left:2px;}
+[data-theme="light"] .theme-toggle-knob{left:22px;}
+.theme-toggle-icon{position:absolute;top:50%;transform:translateY(-50%);font-size:10px;line-height:1;}
+[data-theme="dark"] .sun-icon{right:3px;opacity:.5;}
+[data-theme="dark"] .moon-icon{left:3px;opacity:1;}
+[data-theme="light"] .sun-icon{right:3px;opacity:1;}
+[data-theme="light"] .moon-icon{left:3px;opacity:.4;}
+
+/* Notif button */
+.notif-btn{background:none;border:1px solid var(--border);border-radius:8px;
+  padding:3px 8px;cursor:pointer;font-size:11px;color:var(--text-3);
+  transition:all .2s;white-space:nowrap;font-family:'Lato',sans-serif;}
+.notif-btn.granted{color:var(--teal);border-color:var(--teal-dim);}
+.notif-btn.denied{color:#e07b5a;border-color:rgba(224,123,90,.3);}
+
+.header-title{font-family:'Cinzel',serif;font-size:20px;font-weight:600;color:var(--gold);letter-spacing:1px;}
+.header-sub{font-size:11px;color:var(--text-3);margin-top:2px;letter-spacing:2px;text-transform:uppercase;}
+
+/* ===== CLOCK ===== */
+.clock-wrap{text-align:center;padding:1.1rem 1.5rem 0.4rem;}
+.clock-time{font-size:44px;font-weight:700;color:var(--text-1);letter-spacing:3px;line-height:1;font-variant-numeric:tabular-nums;}
+.clock-date{font-size:12px;color:var(--text-3);margin-top:4px;letter-spacing:.4px;}
+
+/* ===== COUNTDOWN ===== */
+.countdown-card{margin:1rem 1.25rem 0;background:var(--bg-card);border:1px solid var(--border-strong);
+  border-radius:14px;padding:1.3rem 1.5rem;text-align:center;position:relative;overflow:hidden;transition:background .3s,border .3s;}
+.countdown-card::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(200,169,110,0.06) 0%,transparent 65%);}
+[data-theme="light"] .countdown-card::before{background:radial-gradient(ellipse at 50% 0%,rgba(139,95,32,0.05) 0%,transparent 65%);}
+.next-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);margin-bottom:4px;}
+.next-name{font-family:'Cinzel',serif;font-size:25px;font-weight:600;color:var(--gold);margin-bottom:2px;}
+.next-time{font-size:36px;font-weight:700;color:var(--teal);letter-spacing:2px;font-variant-numeric:tabular-nums;margin-bottom:5px;}
+.next-remaining{font-size:13px;color:var(--text-2);}
+.next-remaining span{color:var(--gold-light);}
+
+/* ===== JUMU'AH CARD ===== */
+.jumuah-card{margin:0.8rem 1.25rem 0;background:var(--friday-bg);border:1px solid var(--friday-border);
+  border-radius:12px;padding:1.1rem 1.25rem;transition:all .3s;}
+.jumuah-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.jumuah-title{font-family:'Cinzel',serif;font-size:14px;color:var(--teal);font-weight:600;}
+.jumuah-time{font-size:15px;font-weight:700;color:var(--teal);font-variant-numeric:tabular-nums;}
+.jumuah-hadith{font-size:12px;color:var(--text-2);line-height:1.6;font-style:italic;border-top:1px solid var(--friday-border);padding-top:8px;margin-top:4px;}
+.jumuah-source{font-size:10px;color:var(--text-3);margin-top:4px;font-style:normal;letter-spacing:.5px;}
+
+/* ===== PRAYER LIST ===== */
+.prayer-list{margin:0.9rem 1.25rem 0;display:flex;flex-direction:column;gap:6px;}
+.prayer-item{display:flex;align-items:center;padding:12px 15px;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:10px;position:relative;overflow:hidden;transition:background .3s,border .3s,opacity .2s;}
+.prayer-item.is-next{border-color:var(--teal-dim);background:var(--teal-bg);box-shadow:0 0 16px rgba(78,205,196,0.07);}
+.prayer-item.is-past{opacity:.35;}
+.active-bar{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--teal);border-radius:10px 0 0 10px;}
+.p-dot{width:9px;height:9px;border-radius:50%;margin-right:13px;flex-shrink:0;}
+.p-name{font-family:'Cinzel',serif;font-size:13px;font-weight:600;color:var(--text-1);flex:1;}
+.p-arabic{font-size:11px;color:var(--text-3);margin-left:4px;}
+.p-time{font-size:17px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums;}
+.prayer-item.is-next .p-time{color:var(--teal);}
+
+/* ===== NOTIFICATION BANNER ===== */
+.notif-banner{margin:0.8rem 1.25rem 0;background:var(--notif-bg);border:1px solid var(--notif-border);
+  border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .2s;}
+.notif-banner:hover{border-color:var(--border-strong);}
+.notif-banner-icon{font-size:18px;flex-shrink:0;}
+.notif-banner-text{flex:1;}
+.notif-banner-title{font-size:13px;font-weight:400;color:var(--text-1);margin-bottom:1px;}
+.notif-banner-sub{font-size:11px;color:var(--text-3);}
+.notif-banner-cta{font-size:11px;color:var(--teal);font-weight:700;white-space:nowrap;letter-spacing:.5px;}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;
+  background:var(--bg-page);border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:200;
+  backdrop-filter:blur(14px);transition:background .3s,border .3s;}
+.nav-btn{background:none;border:none;color:var(--text-3);cursor:pointer;display:flex;
+  flex-direction:column;align-items:center;gap:3px;padding:6px 28px;border-radius:8px;
+  transition:color .2s;font-family:'Lato',sans-serif;}
+.nav-btn.active{color:var(--gold);}
+.nav-btn svg{width:22px;height:22px;}
+.nav-btn span{font-size:10px;letter-spacing:1px;text-transform:uppercase;}
+
+/* ===== PAGES ===== */
+.page{display:none;} .page.active{display:block;}
+
+/* ===== TIMETABLE ===== */
+.month-list{margin:1.1rem 1.25rem;display:flex;flex-direction:column;gap:10px;}
+.month-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:background .3s,border .3s;}
+.month-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;
+  cursor:pointer;user-select:none;background:var(--bg-panel);transition:background .3s;}
+.month-head:active{opacity:.8;}
+.month-head-name{font-family:'Cinzel',serif;font-size:15px;color:var(--gold);}
+.month-head-toggle{color:var(--text-3);font-size:16px;transition:transform .2s;}
+.month-card.open .month-head-toggle{transform:rotate(180deg);}
+.month-body{display:none;overflow-x:auto;}
+.month-card.open .month-body{display:block;}
+.mt{width:100%;border-collapse:collapse;font-size:11px;}
+.mt th{padding:8px 4px;color:var(--text-3);text-align:center;border-bottom:1px solid var(--border);
+  font-weight:400;letter-spacing:1px;text-transform:uppercase;}
+.mt td{padding:7px 4px;text-align:center;color:var(--text-2);
+  border-bottom:1px solid rgba(200,169,110,0.05);font-variant-numeric:tabular-nums;}
+[data-theme="light"] .mt td{border-bottom-color:rgba(139,95,32,0.07);}
+.mt tr:last-child td{border-bottom:none;}
+.mt td:first-child{color:var(--text-3);font-size:10px;}
+.mt tr.today-row td{color:var(--teal);background:var(--teal-bg);}
+.mt tr.today-row td:first-child{font-weight:700;}
+.mt tr.friday-row td{background:var(--friday-bg);}
+.mt tr.friday-row td:first-child{color:var(--teal);font-weight:700;}
+
+@media(max-width:380px){
+  .next-time{font-size:30px;} .clock-time{font-size:36px;}
+  .mt{font-size:10px;} .mt td,.mt th{padding:6px 3px;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- TODAY PAGE -->
+  <div id="page-today" class="page active">
+    <div class="header">
+      <div class="header-top">
+        <div style="width:80px"></div>
+        <div class="header-arabic">بِسْمِ اللّهِ الرَّحْمَنِ الرَّحِيْم</div>
+        <div class="header-actions">
+          <button class="notif-btn" id="notif-btn" onclick="requestNotifications()" title="Prayer notifications">🔔</button>
+          <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle light/dark mode">
+            <div class="theme-toggle-knob"></div>
+            <span class="theme-toggle-icon moon-icon">🌙</span>
+            <span class="theme-toggle-icon sun-icon">☀️</span>
+          </button>
+        </div>
+      </div>
+      <div class="header-title">Prayer Times</div>
+      <div class="header-sub">Dehiwala · ACJU Zone 01 · 2026</div>
+    </div>
+
+    <div class="clock-wrap">
+      <div class="clock-time" id="clock">00:00:00</div>
+      <div class="clock-date" id="clock-date"></div>
+    </div>
+
+    <div id="notif-banner-wrap"></div>
+    <div id="jumuah-wrap"></div>
+
+    <div class="countdown-card">
+      <div class="next-label">Next Prayer</div>
+      <div class="next-name" id="next-name">—</div>
+      <div class="next-time" id="next-time">—</div>
+      <div class="next-remaining" id="next-remaining">Loading...</div>
+    </div>
+
+    <div class="prayer-list" id="prayer-list"></div>
+    <div style="height:.5rem"></div>
+  </div>
+
+  <!-- TIMETABLE PAGE -->
+  <div id="page-timetable" class="page">
+    <div class="header">
+      <div class="header-top">
+        <div style="width:80px"></div>
+        <div class="header-arabic">بِسْمِ اللّهِ الرَّحْمَنِ الرَّحِيْم</div>
+        <div class="header-actions">
+          <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle light/dark mode">
+            <div class="theme-toggle-knob"></div>
+            <span class="theme-toggle-icon moon-icon">🌙</span>
+            <span class="theme-toggle-icon sun-icon">☀️</span>
+          </button>
+        </div>
+      </div>
+      <div class="header-title">Timetable</div>
+      <div class="header-sub">April – December 2026 · Fridays highlighted</div>
+    </div>
+    <div class="month-list" id="month-list"></div>
+  </div>
+
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-today" onclick="showPage('today')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="5"/>
+      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <span>Today</span>
+  </button>
+  <button class="nav-btn" id="nav-timetable" onclick="showPage('timetable')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="3" y="4" width="18" height="18" rx="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+    <span>Timetable</span>
+  </button>
+</nav>
+
+<script>
+// ============================================================
+// OFFICIAL ACJU ZONE 01 — Colombo/Gampaha/Kalutara 2026
+// Transcribed from official ACJU PDF timetables
+// Row: [day, fajr, sunrise, dhuhr, asr, maghrib, isha]
+// ============================================================
+const RAW = {
+  4:[
+    [1,"4:52","6:09","12:16","3:21","6:21","7:30"],[2,"4:52","6:09","12:16","3:20","6:21","7:30"],
+    [3,"4:51","6:08","12:15","3:20","6:21","7:30"],[4,"4:51","6:08","12:15","3:19","6:21","7:30"],
+    [5,"4:50","6:07","12:15","3:18","6:21","7:30"],[6,"4:50","6:07","12:14","3:17","6:21","7:30"],
+    [7,"4:49","6:06","12:14","3:16","6:21","7:30"],[8,"4:48","6:06","12:14","3:15","6:21","7:30"],
+    [9,"4:48","6:05","12:14","3:16","6:21","7:30"],[10,"4:47","6:05","12:13","3:16","6:21","7:30"],
+    [11,"4:47","6:05","12:13","3:17","6:20","7:30"],[12,"4:46","6:04","12:13","3:18","6:20","7:30"],
+    [13,"4:46","6:04","12:12","3:18","6:20","7:30"],[14,"4:45","6:03","12:12","3:19","6:20","7:30"],
+    [15,"4:45","6:03","12:12","3:19","6:20","7:30"],[16,"4:44","6:02","12:12","3:19","6:20","7:30"],
+    [17,"4:44","6:02","12:12","3:20","6:20","7:30"],[18,"4:43","6:02","12:11","3:20","6:20","7:30"],
+    [19,"4:43","6:01","12:11","3:21","6:20","7:30"],[20,"4:42","6:01","12:11","3:21","6:20","7:30"],
+    [21,"4:42","6:00","12:11","3:22","6:20","7:30"],[22,"4:41","6:00","12:10","3:22","6:20","7:30"],
+    [23,"4:41","6:00","12:10","3:22","6:20","7:31"],[24,"4:40","5:59","12:10","3:23","6:20","7:31"],
+    [25,"4:40","5:59","12:10","3:23","6:20","7:31"],[26,"4:39","5:59","12:10","3:24","6:20","7:31"],
+    [27,"4:39","5:58","12:10","3:24","6:20","7:31"],[28,"4:38","5:58","12:09","3:24","6:20","7:31"],
+    [29,"4:38","5:58","12:09","3:25","6:20","7:31"],[30,"4:37","5:57","12:09","3:25","6:20","7:31"]
+  ],
+  5:[
+    [1,"4:37","5:57","12:09","3:25","6:20","7:31"],[2,"4:37","5:57","12:09","3:26","6:20","7:32"],
+    [3,"4:36","5:56","12:09","3:26","6:20","7:32"],[4,"4:36","5:56","12:09","3:26","6:20","7:32"],
+    [5,"4:35","5:56","12:09","3:27","6:20","7:32"],[6,"4:35","5:56","12:09","3:27","6:20","7:32"],
+    [7,"4:35","5:55","12:08","3:27","6:20","7:33"],[8,"4:34","5:55","12:08","3:28","6:21","7:33"],
+    [9,"4:34","5:55","12:08","3:28","6:21","7:33"],[10,"4:34","5:55","12:08","3:28","6:21","7:33"],
+    [11,"4:33","5:55","12:08","3:29","6:21","7:34"],[12,"4:33","5:55","12:08","3:29","6:21","7:34"],
+    [13,"4:33","5:54","12:08","3:29","6:21","7:34"],[14,"4:33","5:54","12:08","3:30","6:21","7:34"],
+    [15,"4:32","5:54","12:08","3:30","6:21","7:35"],[16,"4:32","5:54","12:08","3:31","6:22","7:35"],
+    [17,"4:32","5:54","12:08","3:31","6:22","7:35"],[18,"4:32","5:54","12:08","3:31","6:22","7:35"],
+    [19,"4:31","5:54","12:08","3:31","6:22","7:36"],[20,"4:31","5:54","12:08","3:32","6:22","7:36"],
+    [21,"4:31","5:54","12:09","3:32","6:22","7:36"],[22,"4:31","5:54","12:09","3:32","6:23","7:36"],
+    [23,"4:31","5:54","12:09","3:33","6:23","7:37"],[24,"4:31","5:53","12:09","3:33","6:23","7:37"],
+    [25,"4:30","5:53","12:09","3:33","6:23","7:38"],[26,"4:30","5:53","12:09","3:34","6:23","7:38"],
+    [27,"4:30","5:53","12:09","3:34","6:24","7:38"],[28,"4:30","5:54","12:09","3:34","6:24","7:39"],
+    [29,"4:30","5:54","12:09","3:35","6:24","7:39"],[30,"4:30","5:54","12:09","3:35","6:24","7:39"],
+    [31,"4:30","5:54","12:10","3:35","6:25","7:39"]
+  ],
+  6:[
+    [1,"4:30","5:54","12:10","3:35","6:25","7:40"],[2,"4:30","5:54","12:10","3:36","6:25","7:40"],
+    [3,"4:30","5:54","12:10","3:36","6:25","7:40"],[4,"4:30","5:54","12:10","3:37","6:26","7:41"],
+    [5,"4:30","5:54","12:10","3:37","6:26","7:41"],[6,"4:30","5:54","12:11","3:37","6:26","7:41"],
+    [7,"4:30","5:54","12:11","3:37","6:26","7:42"],[8,"4:30","5:54","12:11","3:38","6:27","7:42"],
+    [9,"4:30","5:55","12:11","3:38","6:27","7:42"],[10,"4:30","5:55","12:11","3:38","6:27","7:43"],
+    [11,"4:30","5:55","12:12","3:38","6:27","7:43"],[12,"4:30","5:55","12:12","3:39","6:28","7:43"],
+    [13,"4:30","5:55","12:12","3:39","6:28","7:43"],[14,"4:31","5:55","12:12","3:39","6:28","7:44"],
+    [15,"4:31","5:56","12:12","3:40","6:28","7:44"],[16,"4:31","5:56","12:13","3:40","6:28","7:44"],
+    [17,"4:31","5:56","12:13","3:40","6:29","7:45"],[18,"4:31","5:56","12:13","3:40","6:29","7:45"],
+    [19,"4:31","5:56","12:13","3:41","6:29","7:45"],[20,"4:32","5:57","12:13","3:41","6:29","7:45"],
+    [21,"4:32","5:57","12:14","3:41","6:30","7:46"],[22,"4:32","5:57","12:14","3:41","6:30","7:46"],
+    [23,"4:32","5:57","12:14","3:41","6:30","7:46"],[24,"4:33","5:57","12:14","3:42","6:30","7:46"],
+    [25,"4:33","5:58","12:15","3:42","6:31","7:46"],[26,"4:33","5:58","12:15","3:42","6:31","7:47"],
+    [27,"4:33","5:58","12:15","3:42","6:31","7:47"],[28,"4:34","5:58","12:15","3:42","6:31","7:47"],
+    [29,"4:34","5:59","12:15","3:43","6:31","7:47"],[30,"4:34","5:59","12:16","3:43","6:31","7:47"]
+  ],
+  7:[
+    [1,"4:34","5:59","12:16","3:43","6:32","7:47"],[2,"4:35","5:59","12:16","3:43","6:32","7:47"],
+    [3,"4:35","5:59","12:16","3:43","6:32","7:47"],[4,"4:35","6:00","12:16","3:43","6:32","7:48"],
+    [5,"4:35","6:00","12:16","3:43","6:32","7:48"],[6,"4:36","6:00","12:17","3:43","6:32","7:48"],
+    [7,"4:36","6:00","12:17","3:43","6:32","7:48"],[8,"4:36","6:01","12:17","3:43","6:32","7:48"],
+    [9,"4:37","6:01","12:17","3:43","6:32","7:48"],[10,"4:37","6:01","12:17","3:44","6:33","7:48"],
+    [11,"4:37","6:01","12:17","3:43","6:33","7:48"],[12,"4:37","6:01","12:18","3:43","6:33","7:48"],
+    [13,"4:38","6:02","12:18","3:43","6:33","7:48"],[14,"4:38","6:02","12:18","3:43","6:33","7:48"],
+    [15,"4:38","6:02","12:18","3:43","6:33","7:47"],[16,"4:39","6:02","12:18","3:43","6:33","7:47"],
+    [17,"4:39","6:02","12:18","3:43","6:33","7:47"],[18,"4:39","6:02","12:18","3:43","6:33","7:47"],
+    [19,"4:40","6:03","12:18","3:43","6:33","7:47"],[20,"4:40","6:03","12:18","3:43","6:33","7:47"],
+    [21,"4:40","6:03","12:18","3:42","6:32","7:47"],[22,"4:40","6:03","12:18","3:42","6:32","7:46"],
+    [23,"4:41","6:03","12:18","3:42","6:32","7:46"],[24,"4:41","6:04","12:18","3:42","6:32","7:46"],
+    [25,"4:41","6:04","12:18","3:41","6:32","7:46"],[26,"4:41","6:04","12:18","3:41","6:32","7:46"],
+    [27,"4:42","6:04","12:18","3:41","6:32","7:45"],[28,"4:42","6:04","12:18","3:41","6:32","7:45"],
+    [29,"4:42","6:04","12:18","3:40","6:32","7:45"],[30,"4:42","6:04","12:18","3:40","6:31","7:44"],
+    [31,"4:43","6:04","12:18","3:40","6:31","7:44"]
+  ],
+  8:[
+    [1,"4:43","6:04","12:18","3:39","6:31","7:44"],[2,"4:43","6:04","12:18","3:39","6:31","7:44"],
+    [3,"4:43","6:05","12:18","3:38","6:31","7:43"],[4,"4:43","6:05","12:18","3:38","6:30","7:43"],
+    [5,"4:44","6:05","12:18","3:37","6:30","7:43"],[6,"4:44","6:05","12:18","3:37","6:30","7:42"],
+    [7,"4:44","6:05","12:18","3:37","6:30","7:42"],[8,"4:44","6:05","12:18","3:36","6:29","7:41"],
+    [9,"4:44","6:05","12:17","3:36","6:29","7:41"],[10,"4:44","6:05","12:17","3:35","6:29","7:41"],
+    [11,"4:45","6:05","12:17","3:34","6:28","7:40"],[12,"4:45","6:05","12:17","3:34","6:28","7:40"],
+    [13,"4:45","6:05","12:17","3:33","6:28","7:39"],[14,"4:45","6:05","12:17","3:32","6:27","7:39"],
+    [15,"4:45","6:05","12:16","3:32","6:27","7:38"],[16,"4:45","6:05","12:16","3:31","6:27","7:38"],
+    [17,"4:45","6:05","12:16","3:30","6:26","7:37"],[18,"4:45","6:05","12:16","3:30","6:26","7:37"],
+    [19,"4:45","6:05","12:16","3:29","6:26","7:36"],[20,"4:45","6:05","12:15","3:28","6:25","7:36"],
+    [21,"4:45","6:04","12:15","3:27","6:25","7:35"],[22,"4:46","6:04","12:15","3:26","6:24","7:35"],
+    [23,"4:46","6:04","12:15","3:25","6:24","7:34"],[24,"4:46","6:04","12:14","3:25","6:23","7:34"],
+    [25,"4:46","6:04","12:14","3:24","6:23","7:33"],[26,"4:45","6:04","12:14","3:23","6:22","7:32"],
+    [27,"4:46","6:04","12:13","3:22","6:22","7:32"],[28,"4:46","6:04","12:13","3:21","6:22","7:31"],
+    [29,"4:46","6:04","12:13","3:20","6:21","7:31"],[30,"4:46","6:04","12:13","3:19","6:21","7:30"],
+    [31,"4:45","6:03","12:12","3:18","6:20","7:30"]
+  ],
+  9:[
+    [1,"4:45","6:03","12:12","3:17","6:20","7:29"],[2,"4:45","6:03","12:12","3:16","6:19","7:28"],
+    [3,"4:45","6:03","12:11","3:15","6:18","7:28"],[4,"4:45","6:03","12:11","3:13","6:18","7:27"],
+    [5,"4:45","6:03","12:11","3:12","6:18","7:27"],[6,"4:45","6:02","12:10","3:12","6:17","7:26"],
+    [7,"4:45","6:02","12:10","3:12","6:16","7:26"],[8,"4:45","6:02","12:10","3:13","6:16","7:25"],
+    [9,"4:45","6:02","12:09","3:13","6:15","7:24"],[10,"4:45","6:02","12:09","3:13","6:15","7:24"],
+    [11,"4:45","6:02","12:09","3:13","6:14","7:23"],[12,"4:45","6:02","12:08","3:14","6:14","7:23"],
+    [13,"4:45","6:01","12:08","3:14","6:13","7:22"],[14,"4:44","6:01","12:07","3:14","6:13","7:21"],
+    [15,"4:44","6:01","12:07","3:14","6:12","7:21"],[16,"4:44","6:01","12:07","3:14","6:12","7:20"],
+    [17,"4:44","6:01","12:06","3:15","6:11","7:20"],[18,"4:44","6:01","12:06","3:15","6:10","7:19"],
+    [19,"4:44","6:00","12:06","3:15","6:10","7:18"],[20,"4:44","6:00","12:05","3:15","6:09","7:18"],
+    [21,"4:43","6:00","12:05","3:15","6:09","7:17"],[22,"4:43","6:00","12:04","3:15","6:08","7:17"],
+    [23,"4:43","6:00","12:04","3:16","6:07","7:16"],[24,"4:43","6:00","12:04","3:16","6:07","7:16"],
+    [25,"4:43","6:00","12:04","3:16","6:07","7:15"],[26,"4:43","5:59","12:03","3:16","6:06","7:15"],
+    [27,"4:43","5:59","12:03","3:16","6:05","7:14"],[28,"4:43","5:59","12:03","3:16","6:05","7:13"],
+    [29,"4:42","5:59","12:02","3:16","6:04","7:13"],[30,"4:42","5:59","12:02","3:16","6:04","7:12"]
+  ],
+  10:[
+    [1,"4:42","5:59","12:02","3:16","6:03","7:12"],[2,"4:42","5:59","12:01","3:16","6:03","7:12"],
+    [3,"4:42","5:58","12:01","3:16","6:02","7:11"],[4,"4:42","5:58","12:01","3:17","6:02","7:11"],
+    [5,"4:41","5:58","12:00","3:16","6:01","7:10"],[6,"4:41","5:58","12:00","3:17","6:01","7:10"],
+    [7,"4:41","5:58","12:00","3:16","6:01","7:09"],[8,"4:41","5:58","11:59","3:17","6:00","7:09"],
+    [9,"4:41","5:58","11:59","3:17","6:00","7:08"],[10,"4:41","5:58","11:59","3:17","5:59","7:08"],
+    [11,"4:41","5:58","11:59","3:17","5:59","7:08"],[12,"4:41","5:58","11:58","3:17","5:58","7:07"],
+    [13,"4:40","5:57","11:58","3:16","5:58","7:07"],[14,"4:40","5:57","11:58","3:17","5:58","7:06"],
+    [15,"4:40","5:57","11:58","3:17","5:57","7:06"],[16,"4:40","5:57","11:58","3:17","5:57","7:06"],
+    [17,"4:40","5:57","11:57","3:17","5:56","7:05"],[18,"4:40","5:57","11:57","3:17","5:56","7:05"],
+    [19,"4:40","5:57","11:57","3:17","5:56","7:05"],[20,"4:40","5:57","11:57","3:17","5:55","7:05"],
+    [21,"4:40","5:57","11:57","3:16","5:55","7:04"],[22,"4:40","5:57","11:56","3:17","5:54","7:04"],
+    [23,"4:40","5:57","11:56","3:17","5:54","7:04"],[24,"4:40","5:57","11:56","3:17","5:54","7:04"],
+    [25,"4:39","5:57","11:56","3:17","5:54","7:03"],[26,"4:39","5:57","11:56","3:17","5:53","7:03"],
+    [27,"4:39","5:58","11:56","3:17","5:53","7:03"],[28,"4:39","5:58","11:56","3:17","5:53","7:03"],
+    [29,"4:40","5:58","11:56","3:17","5:53","7:03"],[30,"4:39","5:58","11:56","3:17","5:52","7:03"],
+    [31,"4:40","5:58","11:56","3:17","5:52","7:02"]
+  ],
+  11:[
+    [1,"4:40","5:58","11:56","3:17","5:52","7:03"],[2,"4:39","5:58","11:56","3:17","5:52","7:02"],
+    [3,"4:39","5:58","11:56","3:17","5:52","7:02"],[4,"4:40","5:59","11:56","3:17","5:51","7:02"],
+    [5,"4:40","5:59","11:56","3:17","5:51","7:02"],[6,"4:40","5:59","11:56","3:17","5:51","7:02"],
+    [7,"4:40","5:59","11:56","3:17","5:51","7:02"],[8,"4:40","5:59","11:56","3:17","5:51","7:02"],
+    [9,"4:40","6:00","11:56","3:18","5:51","7:02"],[10,"4:40","6:00","11:56","3:18","5:51","7:02"],
+    [11,"4:40","6:00","11:56","3:18","5:51","7:02"],[12,"4:40","6:00","11:56","3:18","5:51","7:03"],
+    [13,"4:41","6:01","11:56","3:18","5:51","7:03"],[14,"4:41","6:01","11:56","3:18","5:51","7:03"],
+    [15,"4:41","6:01","11:57","3:18","5:51","7:03"],[16,"4:41","6:02","11:57","3:19","5:51","7:03"],
+    [17,"4:41","6:02","11:57","3:19","5:51","7:03"],[18,"4:42","6:02","11:57","3:19","5:51","7:03"],
+    [19,"4:42","6:03","11:57","3:19","5:51","7:04"],[20,"4:42","6:03","11:58","3:19","5:51","7:04"],
+    [21,"4:42","6:03","11:58","3:20","5:52","7:04"],[22,"4:43","6:04","11:58","3:20","5:52","7:04"],
+    [23,"4:43","6:04","11:58","3:20","5:52","7:05"],[24,"4:43","6:05","11:59","3:20","5:52","7:05"],
+    [25,"4:44","6:05","11:59","3:21","5:52","7:05"],[26,"4:44","6:05","11:59","3:21","5:52","7:05"],
+    [27,"4:44","6:06","12:00","3:21","5:53","7:06"],[28,"4:44","6:06","12:00","3:22","5:53","7:06"],
+    [29,"4:45","6:06","12:00","3:22","5:53","7:07"],[30,"4:45","6:07","12:01","3:22","5:53","7:07"]
+  ],
+  12:[
+    [1,"4:45","6:07","12:01","3:23","5:54","7:07"],[2,"4:46","6:08","12:01","3:23","5:54","7:07"],
+    [3,"4:46","6:08","12:02","3:23","5:54","7:08"],[4,"4:47","6:09","12:02","3:24","5:55","7:08"],
+    [5,"4:47","6:09","12:03","3:24","5:55","7:09"],[6,"4:47","6:10","12:03","3:25","5:56","7:09"],
+    [7,"4:48","6:10","12:04","3:25","5:56","7:10"],[8,"4:48","6:11","12:04","3:25","5:56","7:10"],
+    [9,"4:49","6:11","12:04","3:26","5:57","7:11"],[10,"4:49","6:12","12:05","3:26","5:57","7:11"],
+    [11,"4:50","6:12","12:05","3:27","5:57","7:11"],[12,"4:50","6:13","12:06","3:27","5:58","7:12"],
+    [13,"4:51","6:13","12:06","3:28","5:58","7:12"],[14,"4:51","6:14","12:07","3:28","5:59","7:13"],
+    [15,"4:51","6:14","12:07","3:29","5:59","7:13"],[16,"4:52","6:15","12:08","3:29","5:59","7:14"],
+    [17,"4:52","6:15","12:08","3:30","6:00","7:14"],[18,"4:53","6:16","12:09","3:30","6:01","7:15"],
+    [19,"4:53","6:16","12:09","3:31","6:01","7:15"],[20,"4:54","6:17","12:10","3:31","6:01","7:16"],
+    [21,"4:54","6:17","12:10","3:32","6:02","7:16"],[22,"4:55","6:18","12:11","3:32","6:02","7:17"],
+    [23,"4:55","6:18","12:11","3:32","6:03","7:17"],[24,"4:56","6:19","12:12","3:33","6:03","7:18"],
+    [25,"4:56","6:19","12:12","3:34","6:04","7:18"],[26,"4:57","6:20","12:13","3:34","6:05","7:19"],
+    [27,"4:57","6:20","12:13","3:35","6:05","7:19"],[28,"4:58","6:21","12:14","3:35","6:05","7:20"],
+    [29,"4:58","6:21","12:14","3:35","6:06","7:20"],[30,"4:59","6:22","12:15","3:36","6:07","7:21"],
+    [31,"4:59","6:22","12:15","3:36","6:07","7:21"]
+  ]
+};
+
+// Friday hadiths (rotating)
+const FRIDAY_HADITHS = [
+  { text: "The best day on which the sun rises is Friday. On it Adam was created, on it he was admitted to Paradise, and on it he was expelled from it.", source: "Sahih Muslim 854" },
+  { text: "There is a time on Friday at which no Muslim stands and prays and asks Allah for something good, but He will give it to him.", source: "Sahih al-Bukhari 935" },
+  { text: "Whoever recites Surah Al-Kahf on Friday, a light will shine for him between the two Fridays.", source: "Al-Hakim, Sahih" },
+  { text: "Send abundant blessings upon me on Friday, for your blessings are presented to me.", source: "Abu Dawud 1047, Hasan" },
+  { text: "Friday is the master of days, and the greatest of them before Allah. It is greater before Allah than the day of Adha and the day of Fitr.", source: "Ibn Majah 1084, Sahih" },
+];
+
+// ---- TIME UTILS ----
+function toMins(str, idx) {
+  const [h, m] = str.split(':').map(Number);
+  if (idx < 2) return h * 60 + m;
+  if (idx === 2) return 720 + m;
+  return (h === 12 ? 12 : h + 12) * 60 + m;
+}
+function fmt(mins) {
+  const h = Math.floor(mins / 60) % 24, m = mins % 60;
+  return (h % 12 || 12) + ':' + String(m).padStart(2,'0') + ' ' + (h >= 12 ? 'PM' : 'AM');
+}
+function getTimes(month, day) {
+  const mData = RAW[month]; if (!mData) return null;
+  const row = mData.find(r => r[0] === day); if (!row) return null;
+  return row.slice(1).map((t, i) => toMins(t, i));
+}
+
+const PNAMES = ["Fajr","Sunrise","Dhuhr","Asr","Maghrib","Isha"];
+const PAR    = ["فجر","شروق","ظهر","عصر","مغرب","عشاء"];
+const PCOL   = ["#6bb8d4","#e8a87c","#f5d56a","#d4956a","#e07b5a","#7b9ed9"];
+const MFULL  = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const MSHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const WDAYS  = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const HM     = ["Muharram","Safar","Rabi ul-Awwal","Rabi ul-Akhir","Jumadal-Ula","Jumadal-Akhira","Rajab","Sha'ban","Ramadan","Shawwal","Dhul Qa'dah","Dhul Hijjah"];
+
+// ---- HIJRI ----
+function toHijri(gy, gm, gd) {
+  let y = gy, m = gm, d = gd;
+  if (m < 3) { y--; m += 12; }
+  const A = Math.floor(y/100), B = 2 - A + Math.floor(A/4);
+  const JD = Math.floor(365.25*(y+4716)) + Math.floor(30.6001*(m+1)) + d + B - 1524.5;
+  const hYear = Math.floor((30*(JD-1948439.5)+10646)/10631);
+  const hYearStart = 1948439.5 + 29.5001*Math.floor((11*hYear+3)/30);
+  const hMonth = Math.min(12, Math.ceil((JD-hYearStart)/29.5)+1);
+  const hMonthStart = hYearStart + 29.5001*Math.floor(hMonth-1);
+  const hDay = Math.max(1, Math.min(Math.floor(JD-hMonthStart)+1, 30));
+  return { y: hYear, m: hMonth, d: hDay };
+}
+
+// ---- THEME ----
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  html.dataset.theme = next;
+  document.getElementById('theme-meta').content = next === 'dark' ? '#0a1628' : '#f5f0e8';
+  localStorage.setItem('theme', next);
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.dataset.theme = saved;
+})();
+
+// ---- NAVIGATION ----
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.getElementById('nav-'+name).classList.add('active');
+  if (name === 'timetable' && !document.getElementById('month-list').childElementCount) renderTimetable();
+}
+
+// ---- NOTIFICATIONS ----
+let notifGranted = false;
+let scheduledToday = '';
+
+function updateNotifBtn() {
+  const btn = document.getElementById('notif-btn');
+  const perm = Notification.permission;
+  if (perm === 'granted') {
+    btn.textContent = '🔔 On'; btn.className = 'notif-btn granted';
+    notifGranted = true;
+  } else if (perm === 'denied') {
+    btn.textContent = '🔕 Off'; btn.className = 'notif-btn denied';
+  } else {
+    btn.textContent = '🔔'; btn.className = 'notif-btn';
+  }
+}
+
+function showNotifBanner() {
+  if (!('Notification' in window) || Notification.permission !== 'default') return;
+  const wrap = document.getElementById('notif-banner-wrap');
+  wrap.innerHTML = `
+    <div class="notif-banner" onclick="requestNotifications()">
+      <div class="notif-banner-icon">🔔</div>
+      <div class="notif-banner-text">
+        <div class="notif-banner-title">Enable prayer time reminders</div>
+        <div class="notif-banner-sub">Get notified at each prayer time</div>
+      </div>
+      <div class="notif-banner-cta">ENABLE →</div>
+    </div>`;
+}
+
+async function requestNotifications() {
+  if (!('Notification' in window)) { alert('Notifications are not supported in this browser.'); return; }
+  const perm = await Notification.requestPermission();
+  updateNotifBtn();
+  document.getElementById('notif-banner-wrap').innerHTML = '';
+  if (perm === 'granted') {
+    notifGranted = true;
+    scheduleToday();
+    new Notification('Prayer Times Active 🕌', {
+      body: 'You will be notified at each prayer time. JazakAllah Khair.',
+      icon: ''
+    });
+  }
+}
+
+function scheduleToday() {
+  if (!notifGranted) return;
+  const now = new Date();
+  const dateKey = now.toDateString();
+  if (scheduledToday === dateKey) return;
+  scheduledToday = dateKey;
+  const mo = now.getMonth()+1, d = now.getDate();
+  const times = getTimes(mo, d);
+  if (!times) return;
+  const nowMs = Date.now();
+
+  // Sahr reminder: 2 min before Fajr
+  const sahrMs = new Date(now.getFullYear(), now.getMonth(), now.getDate(),
+    Math.floor(times[0]/60), times[0]%60, 0, 0).getTime() - 2*60*1000;
+  if (sahrMs > nowMs) {
+    setTimeout(() => {
+      new Notification('⏰ Sahr Reminder', { body: 'Fajr in 2 minutes. End your Sahr now.', icon: '' });
+    }, sahrMs - nowMs);
+  }
+
+  PNAMES.forEach((name, i) => {
+    const pMs = new Date(now.getFullYear(), now.getMonth(), now.getDate(),
+      Math.floor(times[i]/60), times[i]%60, 0, 0).getTime();
+    if (pMs > nowMs) {
+      setTimeout(() => {
+        if (i === 1) return; // skip sunrise notification
+        new Notification('🕌 ' + name + ' Time', {
+          body: fmt(times[i]) + ' — ' + PAR[i],
+          icon: ''
+        });
+      }, pMs - nowMs);
+    }
+  });
+}
+
+// ---- JUMU'AH CARD ----
+function renderJumuah(now) {
+  const wrap = document.getElementById('jumuah-wrap');
+  if (now.getDay() !== 5) { wrap.innerHTML = ''; return; }
+  const hadith = FRIDAY_HADITHS[Math.floor(now.getDate() / 7) % FRIDAY_HADITHS.length];
+  wrap.innerHTML = `
+    <div class="jumuah-card">
+      <div class="jumuah-header">
+        <div class="jumuah-title">🕌 Jumu'ah — Friday</div>
+        <div class="jumuah-time">12:30 PM</div>
+      </div>
+      <div class="jumuah-hadith">"${hadith.text}"</div>
+      <div class="jumuah-source">— ${hadith.source}</div>
+    </div>`;
+}
+
+// ---- TODAY RENDER ----
+let lastSecond = -1;
+function renderToday() {
+  const now = new Date();
+  const mo = now.getMonth()+1, d = now.getDate();
+  const nowM = now.getHours()*60 + now.getMinutes();
+  const sec = now.getSeconds();
+  const times = getTimes(mo, d);
+
+  // Clock — every second
+  document.getElementById('clock').textContent =
+    String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+
+  // Rest — only update when minute changes
+  if (sec === lastSecond) return;
+  lastSecond = sec;
+
+  const hi = toHijri(now.getFullYear(), mo, d);
+  document.getElementById('clock-date').textContent =
+    WDAYS[now.getDay()]+', '+d+' '+MFULL[mo-1]+' · '+hi.d+' '+HM[hi.m-1]+' '+hi.y+' AH';
+
+  renderJumuah(now);
+
+  // Next prayer
+  let nextIdx = -1;
+  if (times) for (let i=0;i<times.length;i++) if(times[i]>nowM){nextIdx=i;break;}
+
+  if (times && nextIdx >= 0) {
+    const diff = times[nextIdx] - nowM;
+    const hh = Math.floor(diff/60), mm = diff%60;
+    document.getElementById('next-name').textContent = PNAMES[nextIdx];
+    document.getElementById('next-time').textContent = fmt(times[nextIdx]);
+    document.getElementById('next-remaining').innerHTML =
+      'in <span>'+(hh>0?hh+'h ':'')+mm+' min'+(mm!==1?'s':'')+'</span>';
+  } else {
+    document.getElementById('next-name').textContent = 'Fajr';
+    document.getElementById('next-time').textContent = 'Tomorrow';
+    document.getElementById('next-remaining').textContent = 'All prayers completed for today';
+  }
+
+  // Prayer list
+  const list = document.getElementById('prayer-list');
+  list.innerHTML = '';
+  if (!times) {
+    list.innerHTML = '<div style="text-align:center;color:var(--text-3);padding:2rem;font-size:13px">No data for today</div>';
+    return;
+  }
+  PNAMES.forEach((name, i) => {
+    const isPast = times[i] < nowM, isNext = i===nextIdx;
+    const el = document.createElement('div');
+    el.className = 'prayer-item'+(isNext?' is-next':'')+(isPast&&!isNext?' is-past':'');
+    el.innerHTML = `${isNext?'<div class="active-bar"></div>':''}
+      <div class="p-dot" style="background:${PCOL[i]}"></div>
+      <div style="flex:1"><span class="p-name">${name}</span><span class="p-arabic">${PAR[i]}</span></div>
+      <div class="p-time">${fmt(times[i])}</div>`;
+    list.appendChild(el);
+  });
+
+  // Schedule notifications once per day
+  scheduleToday();
+}
+
+// ---- TIMETABLE ----
+function renderTimetable() {
+  const container = document.getElementById('month-list');
+  const today = new Date();
+  // Day-of-week for Jan 1 2026 = Thursday (4), so Jan 1 offset
+  // We compute weekday for each date directly
+  Object.entries(RAW).forEach(([mStr, days]) => {
+    const mo = parseInt(mStr);
+    const isCurrentMonth = mo === today.getMonth()+1;
+    const card = document.createElement('div');
+    card.className = 'month-card'+(isCurrentMonth?' open':'');
+    const rows = days.map(row => {
+      const [d, ...ts] = row;
+      const isToday = today.getFullYear()===2026 && today.getMonth()+1===mo && today.getDate()===d;
+      const dow = new Date(2026, mo-1, d).getDay(); // 5 = Friday
+      const isFriday = dow === 5;
+      const tMins = ts.map((t,i)=>toMins(t,i));
+      const cls = isToday ? 'today-row' : (isFriday ? 'friday-row' : '');
+      const dayLabel = d+' '+MSHORT[mo-1]+(isFriday?' 🕌':'');
+      return `<tr class="${cls}">
+        <td>${dayLabel}</td>
+        <td>${fmt(tMins[0])}</td><td>${fmt(tMins[1])}</td>
+        <td>${fmt(tMins[2])}</td><td>${fmt(tMins[3])}</td>
+        <td>${fmt(tMins[4])}</td><td>${fmt(tMins[5])}</td>
+      </tr>`;
+    }).join('');
+    card.innerHTML = `
+      <div class="month-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="month-head-name">${MFULL[mo-1]} 2026</span>
+        <span class="month-head-toggle">▾</span>
+      </div>
+      <div class="month-body"><table class="mt">
+        <thead><tr>
+          <th>Date</th>
+          <th style="color:#6bb8d4">Fajr</th><th style="color:#e8a87c">Rise</th>
+          <th style="color:#f5d56a">Dhuhr</th><th style="color:#d4956a">Asr</th>
+          <th style="color:#e07b5a">Maghrib</th><th style="color:#7b9ed9">Isha</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>`;
+    container.appendChild(card);
+  });
+}
+
+// ---- PWA MANIFEST ----
+try {
+  const m = {
+    name:"Prayer Times — Dehiwala",short_name:"Salah Times",
+    description:"ACJU Official Prayer Times for Dehiwala, Zone 01, 2026",
+    start_url:".",display:"standalone",orientation:"portrait",
+    background_color:"#0a1628",theme_color:"#0a1628",
+    icons:[{
+      src:"data:image/svg+xml,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%230a1628'/><text y='130' x='96' font-size='100' text-anchor='middle'>🕌</text></svg>"),
+      sizes:"192x192",type:"image/svg+xml"
+    }]
+  };
+  document.getElementById('manifest-link').href = URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/manifest+json'}));
+} catch(e){}
+
+// ---- INIT ----
+if ('Notification' in window) {
+  updateNotifBtn();
+  showNotifBanner();
+}
+renderToday();
+setInterval(renderToday, 1000);
+
+// Reschedule at midnight
+function scheduleNextMidnight() {
+  const now = new Date();
+  const msToMidnight = new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,5).getTime() - now.getTime();
+  setTimeout(() => { scheduledToday = ''; scheduleToday(); scheduleNextMidnight(); }, msToMidnight);
+}
+scheduleNextMidnight();
+</script>
+</body>
+</html>
